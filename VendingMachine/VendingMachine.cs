@@ -43,6 +43,9 @@ namespace VendingMachine
         private CoinReturnButton coinReturnButton;
 
         // Declare fields for your entity and control objects
+        Controller controller;
+        Can[] cans;
+        List<Coin> coins;
 
 
 
@@ -99,20 +102,37 @@ namespace VendingMachine
             // constructors with arguments (non-default constructors)
             // to pass (set) the first object that ButtonPressed() will
             // visit
-            purchaseButton0 = new PurchaseButton();
-            purchaseButton1 = new PurchaseButton();
-            purchaseButton2 = new PurchaseButton();
-            purchaseButton3 = new PurchaseButton();
+
+            cans = new Can[NUMCANTYPES];
+            coins = new List<Coin>();
+
+            controller = new Controller(cans, coins, noChangeLight, amountDisplay);
+
+            cans[0] = new Can(controller, canDispenser0, purchasableLight0, soldOutLight0, CANPRICES[0], NUMCANS[0]);
+            cans[1] = new Can(controller, canDispenser1, purchasableLight1, soldOutLight1, CANPRICES[1], NUMCANS[1]);
+            cans[2] = new Can(controller, canDispenser2, purchasableLight2, soldOutLight2, CANPRICES[2], NUMCANS[2]);
+            cans[3] = new Can(controller, canDispenser3, purchasableLight3, soldOutLight3, CANPRICES[3], NUMCANS[3]);
+
+            coins.Add(new Coin(controller, coinDispenser10Yen, NUMCOINS[0], COINVALUES[0]));
+            coins.Add(new Coin(controller, coinDispenser50Yen, NUMCOINS[1], COINVALUES[1]));
+            coins.Add(new Coin(controller, coinDispenser100Yen, NUMCOINS[2], COINVALUES[2]));
+            coins.Add(new Coin(controller, coinDispenser500Yen, NUMCOINS[3], COINVALUES[3]));
+
+
+            purchaseButton0 = new PurchaseButton(cans[0]);
+            purchaseButton1 = new PurchaseButton(cans[1]);
+            purchaseButton2 = new PurchaseButton(cans[2]);
+            purchaseButton3 = new PurchaseButton(cans[3]);
 
             // You must replace the following default constructors with
             // constructors that take armuments to pass the first object that
             // the CoinInserted() will call
-            coinInserter10Yen = new CoinInserter();
-            coinInserter50Yen = new CoinInserter();
-            coinInserter100Yen = new CoinInserter();
-            coinInserter500Yen = new CoinInserter();
+            coinInserter10Yen = new CoinInserter(coins[0]);
+            coinInserter50Yen = new CoinInserter(coins[1]);
+            coinInserter100Yen = new CoinInserter(coins[2]);
+            coinInserter500Yen = new CoinInserter(coins[3]);
 
-            coinReturnButton = new CoinReturnButton();
+            coinReturnButton = new CoinReturnButton(controller);
 
             // Instantiate your entity and control objects
             // Connect these objects
@@ -222,16 +242,16 @@ namespace VendingMachine
         private void updateDebugDisplays()
         {
             // You need to change XXX to appropriate "object.property"
-            /* 
-            displayNum10Yen.Display(XXX);
-            displayNum50Yen.Display(XXX);
-            displayNum100Yen.Display(XXX);
-            displayNum500Yen.Display(XXX);
-            displayNumCans0.Display(XXX);
-            displayNumCans1.Display(XXX);
-            displayNumCans2.Display(XXX);
-            displayNumCans3.Display(XXX);
-             * */
+            
+            displayNum10Yen.Display(coins[0].NumCoins);
+            displayNum50Yen.Display(coins[1].NumCoins);
+            displayNum100Yen.Display(coins[2].NumCoins);
+            displayNum500Yen.Display(coins[3].NumCoins);
+            displayNumCans0.Display(cans[0].NumCans);
+            displayNumCans1.Display(cans[1].NumCans);
+            displayNumCans2.Display(cans[2].NumCans);
+            displayNumCans3.Display(cans[3].NumCans);
+            
         }
 
     
